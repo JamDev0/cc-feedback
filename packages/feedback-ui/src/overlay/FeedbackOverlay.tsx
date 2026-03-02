@@ -66,7 +66,8 @@ export function FeedbackOverlay({
       });
       setSubmitted(true);
     } catch (submitError) {
-      const message = submitError instanceof Error ? submitError.message : "Submission failed";
+      const message =
+        submitError instanceof Error ? submitError.message : "Submission failed";
       setError(message);
     } finally {
       setSubmitting(false);
@@ -79,62 +80,129 @@ export function FeedbackOverlay({
   };
 
   return (
-    <>
+    <div data-cc-theme="blueprint">
       <FreezeBackdrop />
       <section
-        aria-label="Voice feedback"
+        aria-label="Feedback"
         role="dialog"
         aria-modal="true"
-        className="cc-feedback-shell"
+        className="cc-fb"
         data-cc-feedback-overlay="true"
       >
-        <RewardBurst visible={submitted} />
-        <h2>Feedback</h2>
+        <header className="cc-fb-header">
+          <h2 className="cc-fb-title">Share feedback</h2>
+          <button
+            type="button"
+            className="cc-fb-close"
+            onClick={close}
+            aria-label="Close feedback"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            >
+              <path d="M1 1l12 12M13 1L1 13" />
+            </svg>
+          </button>
+        </header>
 
-        <div className="cc-feedback-row">
-          <button type="button" onClick={() => setType("issue")} aria-pressed={type === "issue"}>
-            Issue
+        <div className="cc-fb-intent">
+          <button
+            type="button"
+            className="cc-fb-intent-btn"
+            data-active={type === "issue"}
+            aria-pressed={type === "issue"}
+            onClick={() => setType("issue")}
+          >
+            Report issue
           </button>
           <button
             type="button"
-            onClick={() => setType("capability")}
+            className="cc-fb-intent-btn"
+            data-active={type === "capability"}
             aria-pressed={type === "capability"}
+            onClick={() => setType("capability")}
           >
-            Capability
+            Request feature
           </button>
         </div>
 
-        <VoiceRecorderPanel onAudioReady={setAudio} />
-        <textarea
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          placeholder="Optional text (or voice only)"
-        />
+        <div className="cc-fb-body">
+          <VoiceRecorderPanel onAudioReady={setAudio} hasAudio={Boolean(audio)} />
 
-        <div className="cc-feedback-row">
-          <button type="button" onClick={takeScreenshot}>
-            Capture screenshot
-          </button>
-          {screenshot ? <span className="cc-feedback-pill">Screenshot attached</span> : null}
+          <div className="cc-fb-field">
+            <label className="cc-fb-label" htmlFor="cc-fb-text">
+              Description
+            </label>
+            <textarea
+              id="cc-fb-text"
+              className="cc-fb-textarea"
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder="What happened? What would you like to see?"
+            />
+          </div>
+
+          <div className="cc-fb-capture-row">
+            <button type="button" className="cc-fb-capture-btn" onClick={takeScreenshot}>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="2" y="3" width="12" height="10" rx="2" />
+                <circle cx="8" cy="8" r="2.5" />
+                <path d="M5 3V2M11 3V2" />
+              </svg>
+              Capture screenshot
+            </button>
+            {screenshot ? (
+              <span className="cc-fb-pill">Attached</span>
+            ) : null}
+          </div>
+
+          {screenshot ? (
+            <ScreenshotAnnotator screenshot={screenshot} onAnnotated={setScreenshot} />
+          ) : null}
+
+          {type === "issue" ? (
+            <p className="cc-fb-info">
+              Issue reports include browser diagnostics and recent activity logs.
+            </p>
+          ) : null}
+
+          {error ? (
+            <p className="cc-fb-error" role="alert">
+              {error}
+            </p>
+          ) : null}
         </div>
 
-        {screenshot ? <ScreenshotAnnotator screenshot={screenshot} onAnnotated={setScreenshot} /> : null}
+        <hr className="cc-fb-divider" />
 
-        {type === "issue" ? (
-          <p className="cc-feedback-pill">Issue reports include browser info and the last 5 min logs.</p>
-        ) : null}
-
-        {error ? <p role="alert">{error}</p> : null}
-
-        <div className="cc-feedback-row">
-          <button type="button" disabled={!canSubmit || submitting} onClick={submit}>
-            {submitting ? "Sending..." : "Submit"}
+        <footer className="cc-fb-footer">
+          <button
+            type="button"
+            className="cc-fb-submit"
+            disabled={!canSubmit || submitting}
+            onClick={submit}
+          >
+            {submitting ? "Sending\u2026" : "Submit feedback"}
           </button>
-          <button type="button" onClick={close}>
-            Close
-          </button>
-        </div>
+        </footer>
+
+        <RewardBurst visible={submitted} />
       </section>
-    </>
+    </div>
   );
 }

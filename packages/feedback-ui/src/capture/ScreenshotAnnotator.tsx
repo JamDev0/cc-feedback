@@ -29,7 +29,12 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
-    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+      x: (event.clientX - rect.left) * scaleX,
+      y: (event.clientY - rect.top) * scaleY
+    };
   };
 
   const draw = (event: React.MouseEvent<HTMLCanvasElement>) => {
@@ -58,19 +63,20 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     setDrawing(false);
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png"));
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
     if (blob) onAnnotated(blob);
   };
 
   return (
-    <div>
+    <div className="cc-fb-canvas-wrap">
       <canvas
         ref={canvasRef}
         onMouseDown={start}
         onMouseMove={draw}
         onMouseUp={stop}
         onMouseLeave={stop}
-        style={{ width: "100%", borderRadius: 8, border: "1px solid rgba(255,255,255,0.2)" }}
       />
     </div>
   );

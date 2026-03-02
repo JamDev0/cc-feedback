@@ -26,9 +26,15 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <h1>Reference React App</h1>
-      <p>Use this page to verify the feedback overlay integration in isolation.</p>
-      <button type="button" onClick={() => setOpen(true)}>
+      <h1 className="app-title">Reference React App</h1>
+      <p className="app-subtitle">
+        Use this page to verify the feedback overlay integration in isolation.
+      </p>
+      <button
+        type="button"
+        className="app-trigger"
+        onClick={() => setOpen(true)}
+      >
         Open Feedback
       </button>
 

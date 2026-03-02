@@ -97,4 +97,7 @@ Related docs: [API contract](./api.md), [Infra plan](./infra.md), [Runbook](./ru
 - [ ] Issue mode sends browser diagnostics; capability mode does not require them.
 - [ ] Overlay keyboard interaction works (tab/shift-tab/escape strategy).
 - [ ] Error announcements are exposed via alert semantics.
+- [ ] Recorded voice memo exposes play/pause control for preview before submit.
+- [ ] Re-record option is available after a voice memo is attached.
+- [ ] Starting a new recording stops any active playback and revokes the previous preview.
 - [ ] Reference app behavior matches this contract exactly.
