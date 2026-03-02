@@ -3,13 +3,19 @@ import React, { useEffect, useRef, useState } from "react";
 interface ScreenshotAnnotatorProps {
   screenshot: Blob;
   onAnnotated: (blob: Blob) => void;
+  onDone: () => void;
 }
 
-export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnotatorProps) {
+export function ScreenshotAnnotator({ screenshot, onAnnotated, onDone }: ScreenshotAnnotatorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const doneRef = useRef<HTMLButtonElement>(null);
   const historyRef = useRef<ImageData[]>([]);
   const [drawing, setDrawing] = useState(false);
   const [undoCount, setUndoCount] = useState(0);
+
+  useEffect(() => {
+    doneRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const url = URL.createObjectURL(screenshot);
@@ -122,6 +128,15 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
             <path d="M5.5 3L3 5.5 5.5 8" />
           </svg>
           Undo
+        </button>
+        <button
+          ref={doneRef}
+          type="button"
+          className="cc-fb-done-btn"
+          onClick={onDone}
+          aria-label="Finish annotation"
+        >
+          Done
         </button>
       </div>
       <canvas

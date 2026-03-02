@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { FeedbackClient, FeedbackType } from "@cc-feedback/sdk-core";
 import { collectBrowserInfo, captureViewportScreenshot } from "@cc-feedback/sdk-web";
 import { RewardBurst } from "../animations/RewardBurst";
 import { ScreenshotAnnotator } from "../capture/ScreenshotAnnotator";
+import { ScreenshotPreview } from "../capture/ScreenshotPreview";
 import { VoiceRecorderPanel } from "../capture/VoiceRecorderPanel";
 import { FreezeBackdrop } from "./FreezeBackdrop";
 import "../styles.css";
@@ -31,6 +32,12 @@ export function FeedbackOverlay({
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string>();
+  const [annotating, setAnnotating] = useState(false);
+  const wasAnnotatingRef = useRef(false);
+
+  useEffect(() => {
+    wasAnnotatingRef.current = annotating;
+  }, [annotating]);
 
   useEffect(() => {
     client.open();
@@ -133,59 +140,71 @@ export function FeedbackOverlay({
         </div>
 
         <div className="cc-fb-body">
-          <VoiceRecorderPanel onAudioReady={setAudio} hasAudio={Boolean(audio)} />
-
-          <div className="cc-fb-field">
-            <label className="cc-fb-label" htmlFor="cc-fb-text">
-              Description
-            </label>
-            <textarea
-              id="cc-fb-text"
-              className="cc-fb-textarea"
-              value={text}
-              onChange={(event) => setText(event.target.value)}
-              placeholder="What happened? What would you like to see?"
+          {annotating && screenshot ? (
+            <ScreenshotAnnotator
+              screenshot={screenshot}
+              onAnnotated={setScreenshot}
+              onDone={() => setAnnotating(false)}
             />
-          </div>
+          ) : (
+            <>
+              <VoiceRecorderPanel onAudioReady={setAudio} hasAudio={Boolean(audio)} />
 
-          <div className="cc-fb-capture-row">
-            <button type="button" className="cc-fb-capture-btn" onClick={takeScreenshot}>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="2" y="3" width="12" height="10" rx="2" />
-                <circle cx="8" cy="8" r="2.5" />
-                <path d="M5 3V2M11 3V2" />
-              </svg>
-              Capture screenshot
-            </button>
-            {screenshot ? (
-              <span className="cc-fb-pill">Attached</span>
-            ) : null}
-          </div>
+              <div className="cc-fb-field">
+                <label className="cc-fb-label" htmlFor="cc-fb-text">
+                  Description
+                </label>
+                <textarea
+                  id="cc-fb-text"
+                  className="cc-fb-textarea"
+                  value={text}
+                  onChange={(event) => setText(event.target.value)}
+                  placeholder="What happened? What would you like to see?"
+                />
+              </div>
 
-          {screenshot ? (
-            <ScreenshotAnnotator screenshot={screenshot} onAnnotated={setScreenshot} />
-          ) : null}
+              <div className="cc-fb-capture-row">
+                <button type="button" className="cc-fb-capture-btn" onClick={takeScreenshot}>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect x="2" y="3" width="12" height="10" rx="2" />
+                    <circle cx="8" cy="8" r="2.5" />
+                    <path d="M5 3V2M11 3V2" />
+                  </svg>
+                  Capture screenshot
+                </button>
+              </div>
 
-          {type === "issue" ? (
-            <p className="cc-fb-info">
-              Issue reports include browser diagnostics and recent activity logs.
-            </p>
-          ) : null}
+              {screenshot ? (
+                <ScreenshotPreview
+                  screenshot={screenshot}
+                  onAnnotate={() => setAnnotating(true)}
+                  onRemove={() => setScreenshot(undefined)}
+                  returnFocus={wasAnnotatingRef.current}
+                />
+              ) : null}
 
-          {error ? (
-            <p className="cc-fb-error" role="alert">
-              {error}
-            </p>
-          ) : null}
+              {type === "issue" ? (
+                <p className="cc-fb-info">
+                  Issue reports include browser diagnostics and recent activity logs.
+                </p>
+              ) : null}
+
+              {error ? (
+                <p className="cc-fb-error" role="alert">
+                  {error}
+                </p>
+              ) : null}
+            </>
+          )}
         </div>
 
         <hr className="cc-fb-divider" />
