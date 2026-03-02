@@ -44,6 +44,16 @@ export function FeedbackOverlay({
     return () => client.close();
   }, [client]);
 
+  useEffect(() => {
+    if (submitted) {
+      const timer = setTimeout(() => {
+        client.close();
+        onClose?.();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitted, client, onClose]);
+
   const canSubmit = useMemo(() => Boolean(audio || text.trim()), [audio, text]);
 
   const takeScreenshot = async () => {
