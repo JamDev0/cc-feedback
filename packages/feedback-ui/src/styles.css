@@ -298,6 +298,64 @@
   font-weight: 500;
 }
 
+.cc-fb-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--cc-radius-sm);
+  border: 1px solid var(--cc-border);
+  background: var(--cc-surface-alt);
+  color: var(--cc-text);
+  font-family: var(--cc-font-body);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cc-fb-play-btn:hover {
+  border-color: var(--cc-text-secondary);
+}
+
+.cc-fb-play-btn:active {
+  transform: scale(0.97);
+}
+
+.cc-fb-play-btn[data-playing="true"] {
+  border-color: var(--cc-accent);
+  color: var(--cc-accent);
+}
+
+.cc-fb-rerecord-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--cc-radius-sm);
+  border: 1px solid var(--cc-border-subtle);
+  background: transparent;
+  color: var(--cc-text-secondary);
+  font-family: var(--cc-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.cc-fb-rerecord-btn:hover {
+  color: var(--cc-text);
+  border-color: var(--cc-text-secondary);
+}
+
+.cc-fb-rerecord-btn:active {
+  transform: scale(0.97);
+}
+
 
 /* ----------------------------------------------------------------
    8. FORM FIELDS
