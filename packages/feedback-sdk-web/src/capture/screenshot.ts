@@ -4,7 +4,10 @@ export async function captureViewportScreenshot() {
   const canvas = await html2canvas(document.documentElement, {
     backgroundColor: null,
     useCORS: true,
-    logging: false
+    logging: false,
+    ignoreElements: (element) =>
+      element instanceof HTMLElement &&
+      element.dataset.ccFeedbackOverlay === "true"
   });
 
   return await new Promise<Blob>((resolve, reject) => {
