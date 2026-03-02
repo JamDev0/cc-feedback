@@ -1,0 +1,17 @@
+{
+  "name": "@cc-feedback/reference-react",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@cc-feedback/sdk-core": "0.1.0",
+    "@cc-feedback/ui": "0.1.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  }
+}

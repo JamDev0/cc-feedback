@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/feedback-sdk-core" },
+    { "path": "./packages/feedback-sdk-web" },
+    { "path": "./packages/feedback-ui" },
+    { "path": "./apps/mock-feedback-api" },
+    { "path": "./apps/reference-react" }
+  ]
+}

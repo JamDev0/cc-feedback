@@ -1,0 +1,64 @@
+.cc-feedback-backdrop {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(12px) saturate(110%);
+  background: rgba(10, 15, 28, 0.45);
+  z-index: 9998;
+}
+
+.cc-feedback-shell {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: min(460px, calc(100vw - 24px));
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(18, 24, 39, 0.64);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  color: #f8fafc;
+}
+
+.cc-feedback-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.cc-feedback-shell button,
+.cc-feedback-shell textarea,
+.cc-feedback-shell input {
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+}
+
+.cc-feedback-shell button {
+  cursor: pointer;
+  padding: 8px 12px;
+}
+
+.cc-feedback-shell textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  padding: 8px;
+}
+
+.cc-feedback-pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cc-feedback-success {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

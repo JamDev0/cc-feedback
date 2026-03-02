@@ -1,0 +1,14 @@
+{
+  "name": "@cc-feedback/sdk-web",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@cc-feedback/sdk-core": "0.1.0",
+    "html2canvas": "^1.4.1"
+  }
+}
