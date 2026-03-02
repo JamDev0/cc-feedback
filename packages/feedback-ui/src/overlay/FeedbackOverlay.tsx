@@ -148,7 +148,11 @@ export function FeedbackOverlay({
             />
           ) : (
             <>
-              <VoiceRecorderPanel onAudioReady={setAudio} hasAudio={Boolean(audio)} />
+              <VoiceRecorderPanel
+                onAudioReady={setAudio}
+                onAudioRemove={() => setAudio(undefined)}
+                hasAudio={Boolean(audio)}
+              />
 
               <div className="cc-fb-field">
                 <label className="cc-fb-label" htmlFor="cc-fb-text">

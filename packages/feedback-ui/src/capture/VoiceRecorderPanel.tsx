@@ -3,6 +3,7 @@ import { AudioRecorder } from "@cc-feedback/sdk-web";
 
 interface VoiceRecorderPanelProps {
   onAudioReady: (audio: Blob) => void;
+  onAudioRemove: () => void;
   hasAudio: boolean;
 }
 
@@ -12,7 +13,7 @@ function formatElapsed(seconds: number) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function VoiceRecorderPanel({ onAudioReady, hasAudio }: VoiceRecorderPanelProps) {
+export function VoiceRecorderPanel({ onAudioReady, onAudioRemove, hasAudio }: VoiceRecorderPanelProps) {
   const recorderRef = useRef<AudioRecorder | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const previewUrlRef = useRef<string | undefined>(undefined);
@@ -106,6 +107,12 @@ export function VoiceRecorderPanel({ onAudioReady, hasAudio }: VoiceRecorderPane
     }
   };
 
+  const deleteAudio = () => {
+    stopPlayback();
+    revokePreview();
+    onAudioRemove();
+  };
+
   const showPlayback = hasAudio && Boolean(previewUrl) && !recording;
 
   return (
@@ -179,13 +186,25 @@ export function VoiceRecorderPanel({ onAudioReady, hasAudio }: VoiceRecorderPane
         </div>
 
         {showPlayback ? (
-          <button
-            type="button"
-            className="cc-fb-rerecord-btn"
-            onClick={startRecording}
-          >
-            Re-record
-          </button>
+          <div className="cc-fb-rec-actions">
+            <button
+              type="button"
+              className="cc-fb-rerecord-btn"
+              onClick={startRecording}
+            >
+              Re-record
+            </button>
+            <button
+              type="button"
+              className="cc-fb-delete-btn"
+              aria-label="Delete voice memo"
+              onClick={deleteAudio}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                <path d="M1.5 1.5l9 9M10.5 1.5l-9 9" />
+              </svg>
+            </button>
+          </div>
         ) : null}
       </div>
 

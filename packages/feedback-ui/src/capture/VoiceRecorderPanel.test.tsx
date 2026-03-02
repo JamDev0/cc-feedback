@@ -33,9 +33,12 @@ describe("VoiceRecorderPanel", () => {
       .mockImplementation(() => {});
   });
 
-  async function recordAndStop(onAudioReady = vi.fn()) {
+  async function recordAndStop(
+    onAudioReady = vi.fn(),
+    onAudioRemove = vi.fn()
+  ) {
     const result = render(
-      <VoiceRecorderPanel onAudioReady={onAudioReady} hasAudio={false} />
+      <VoiceRecorderPanel onAudioReady={onAudioReady} onAudioRemove={onAudioRemove} hasAudio={false} />
     );
 
     await act(async () => {
@@ -47,10 +50,10 @@ describe("VoiceRecorderPanel", () => {
     });
 
     result.rerender(
-      <VoiceRecorderPanel onAudioReady={onAudioReady} hasAudio={true} />
+      <VoiceRecorderPanel onAudioReady={onAudioReady} onAudioRemove={onAudioRemove} hasAudio={true} />
     );
 
-    return { ...result, onAudioReady };
+    return { ...result, onAudioReady, onAudioRemove };
   }
 
   it("exposes play control after recording is attached", async () => {
@@ -116,5 +119,28 @@ describe("VoiceRecorderPanel", () => {
     expect(globalThis.URL.revokeObjectURL).toHaveBeenCalledWith(
       "blob:mock-url"
     );
+  });
+
+  it("calls onAudioRemove and resets to idle when delete is clicked", async () => {
+    const { onAudioRemove, rerender } = await recordAndStop();
+
+    const deleteBtn = screen.getByRole("button", { name: /delete voice memo/i });
+    expect(deleteBtn).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(deleteBtn);
+    });
+
+    rerender(
+      <VoiceRecorderPanel onAudioReady={vi.fn()} onAudioRemove={onAudioRemove} hasAudio={false} />
+    );
+
+    expect(onAudioRemove).toHaveBeenCalledOnce();
+    expect(globalThis.URL.revokeObjectURL).toHaveBeenCalledWith("blob:mock-url");
+    expect(screen.getByText("Record voice")).toBeInTheDocument();
+    expect(screen.queryByText("Re-record")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /play voice memo/i })
+    ).not.toBeInTheDocument();
   });
 });

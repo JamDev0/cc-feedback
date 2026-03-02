@@ -327,6 +327,14 @@
   color: var(--cc-accent);
 }
 
+.cc-fb-rec-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .cc-fb-rerecord-btn {
   display: flex;
   align-items: center;
@@ -343,7 +351,6 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -354,6 +361,31 @@
 
 .cc-fb-rerecord-btn:active {
   transform: scale(0.97);
+}
+
+.cc-fb-delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--cc-radius-sm);
+  border: 1px solid var(--cc-border-subtle);
+  background: transparent;
+  color: var(--cc-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.cc-fb-delete-btn:hover {
+  color: var(--cc-error);
+  border-color: var(--cc-error);
+}
+
+.cc-fb-delete-btn:active {
+  transform: scale(0.94);
 }
 
 
