@@ -25,7 +25,7 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     image.src = url;
   }, [screenshot]);
 
-  const withPosition = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const withPosition = (event: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return { x: 0, y: 0 };
     const rect = canvas.getBoundingClientRect();
@@ -37,8 +37,9 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     };
   };
 
-  const draw = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const draw = (event: React.PointerEvent<HTMLCanvasElement>) => {
     if (!drawing) return;
+    event.preventDefault();
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!canvas || !context) return;
@@ -49,20 +50,26 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     context.stroke();
   };
 
-  const start = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const start = (event: React.PointerEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!context) return;
+    if (!canvas || !context) return;
+    canvas.setPointerCapture(event.pointerId);
     const { x, y } = withPosition(event);
     context.beginPath();
     context.moveTo(x, y);
     setDrawing(true);
   };
 
-  const stop = async () => {
-    setDrawing(false);
+  const stop = async (event: React.PointerEvent<HTMLCanvasElement>) => {
+    event.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
+    if (canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+    setDrawing(false);
     const blob = await new Promise<Blob | null>((resolve) =>
       canvas.toBlob(resolve, "image/png")
     );
@@ -73,10 +80,11 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     <div className="cc-fb-canvas-wrap">
       <canvas
         ref={canvasRef}
-        onMouseDown={start}
-        onMouseMove={draw}
-        onMouseUp={stop}
-        onMouseLeave={stop}
+        onPointerDown={start}
+        onPointerMove={draw}
+        onPointerUp={stop}
+        onPointerCancel={stop}
+        onPointerLeave={stop}
       />
     </div>
   );
