@@ -6,6 +6,19 @@ const upload = multer({ storage: multer.memoryStorage() });
 const port = Number(process.env.PORT ?? 8787);
 type UploadedFiles = Record<string, Express.Multer.File[]>;
 
+// CORS middleware for dev
+app.use((request, response, next) => {
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  response.header("Access-Control-Allow-Headers", "Content-Type");
+  
+  if (request.method === "OPTIONS") {
+    response.sendStatus(200);
+    return;
+  }
+  next();
+});
+
 app.get("/health", (_request, response) => {
   response.json({ ok: true });
 });

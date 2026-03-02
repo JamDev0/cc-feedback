@@ -6,11 +6,10 @@ const CONFETTI_PARTICLES = Array.from({ length: 12 }, (_, i) => {
   const distance = 40 + Math.random() * 50;
   const dx = Math.cos(rad) * distance;
   const dy = Math.sin(rad) * distance;
-  const colors = ["#22c55e", "#0ea5e9", "#f59e0b", "#e11d48", "#8b5cf6", "#06b6d4"];
   return {
     dx,
     dy,
-    color: colors[i % colors.length],
+    colorClass: `cc-fb-confetti-c${i % 6}`,
     delay: i * 0.04,
     size: 4 + Math.random() * 4
   };
@@ -25,13 +24,12 @@ export function RewardBurst({ visible }: { visible: boolean }) {
         {CONFETTI_PARTICLES.map((p, i) => (
           <span
             key={i}
-            className="cc-fb-confetti-dot"
+            className={`cc-fb-confetti-dot ${p.colorClass}`}
             style={{
               left: "50%",
               top: "40%",
               width: p.size,
               height: p.size,
-              background: p.color,
               animationDelay: `${p.delay}s`,
               "--dx": `${p.dx}px`,
               "--dy": `${p.dy}px`

@@ -1,6 +1,6 @@
 import { FeedbackClient, type HostAdapter } from "@cc-feedback/sdk-core";
 
-export const FEEDBACK_ENDPOINT = "https://feedback.example.com/v1/feedback";
+export const FEEDBACK_ENDPOINT = "http://localhost:8787/v1/feedback";
 
 export function createFeedbackClient(hostAdapter?: HostAdapter) {
   return new FeedbackClient(

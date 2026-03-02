@@ -1,43 +1,43 @@
 /* ================================================================
-   CC Feedback — Blueprint Theme
-   Technical drafting on prussian blue
+   CC Feedback — Manuscript Theme
+   Ruled paper grid, editorial typography, warm parchment
    ================================================================ */
 
 /* ----------------------------------------------------------------
    1. DESIGN TOKENS
    ---------------------------------------------------------------- */
 
-[data-cc-theme="blueprint"] {
-  --cc-font-display: 'Overpass', sans-serif;
-  --cc-font-body: 'Overpass', sans-serif;
-  --cc-font-mono: 'Overpass Mono', monospace;
-  --cc-bg: #1a3a5c;
-  --cc-surface: rgba(255, 255, 255, 0.04);
-  --cc-surface-alt: rgba(255, 255, 255, 0.07);
-  --cc-border: rgba(145, 195, 240, 0.2);
-  --cc-border-subtle: rgba(145, 195, 240, 0.1);
-  --cc-text: #c8dff0;
-  --cc-text-secondary: #6a9cc4;
-  --cc-accent: #5bc0eb;
-  --cc-accent-hover: #4aacda;
-  --cc-accent-text: #0d2137;
-  --cc-radius: 0px;
-  --cc-radius-sm: 0px;
-  --cc-radius-pill: 0px;
-  --cc-shadow: 0 0 0 1px rgba(145, 195, 240, 0.2);
-  --cc-backdrop-bg: rgba(20, 45, 72, 0.72);
-  --cc-backdrop-blur: blur(6px);
-  --cc-success: #6ee7b7;
-  --cc-error: #f87171;
-  --cc-recording: #f87171;
-  --cc-intent-bg: rgba(255, 255, 255, 0.04);
-  --cc-intent-active-bg: rgba(255, 255, 255, 0.92);
-  --cc-intent-active-text: #1a3a5c;
-  --cc-input-bg: rgba(255, 255, 255, 0.04);
-  --cc-input-border: rgba(145, 195, 240, 0.2);
-  --cc-input-focus: #5bc0eb;
-  --cc-shell-bg: rgba(22, 48, 76, 0.97);
-  --cc-shell-border: rgba(145, 195, 240, 0.25);
+[data-cc-theme="manuscript"] {
+  --cc-font-display: 'Newsreader', Georgia, serif;
+  --cc-font-body: 'Source Serif 4', Georgia, serif;
+  --cc-font-mono: 'JetBrains Mono', monospace;
+  --cc-bg: #f7f3eb;
+  --cc-surface: rgba(42, 31, 21, 0.03);
+  --cc-surface-alt: rgba(42, 31, 21, 0.05);
+  --cc-border: rgba(42, 31, 21, 0.12);
+  --cc-border-subtle: rgba(42, 31, 21, 0.06);
+  --cc-text: #2a1f15;
+  --cc-text-secondary: #6e5d4d;
+  --cc-accent: #4a7c59;
+  --cc-accent-hover: #3d6a4c;
+  --cc-accent-text: #f7f3eb;
+  --cc-radius: 4px;
+  --cc-radius-sm: 3px;
+  --cc-radius-pill: 100px;
+  --cc-shadow: 0 2px 10px rgba(42, 31, 21, 0.06);
+  --cc-backdrop-bg: rgba(247, 243, 235, 0.88);
+  --cc-backdrop-blur: blur(4px);
+  --cc-success: #4a7c59;
+  --cc-error: #c4453a;
+  --cc-recording: #c4453a;
+  --cc-intent-bg: transparent;
+  --cc-intent-active-bg: transparent;
+  --cc-intent-active-text: #2a1f15;
+  --cc-input-bg: rgba(42, 31, 21, 0.02);
+  --cc-input-border: rgba(42, 31, 21, 0.12);
+  --cc-input-focus: #4a7c59;
+  --cc-shell-bg: #faf7f0;
+  --cc-shell-border: rgba(42, 31, 21, 0.1);
 }
 
 
@@ -55,14 +55,31 @@
   animation: cc-fb-fadein 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Horizontal ruled lines across viewport */
 .cc-fb-backdrop::after {
   content: '';
   position: fixed;
   inset: 0;
+  pointer-events: none;
   background-image:
-    linear-gradient(rgba(145, 195, 240, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(145, 195, 240, 0.06) 1px, transparent 1px);
-  background-size: 24px 24px;
+    linear-gradient(
+      transparent 27px,
+      rgba(42, 31, 21, 0.06) 27px,
+      rgba(42, 31, 21, 0.06) 28px,
+      transparent 28px
+    );
+  background-size: 100% 28px;
+}
+
+/* Vertical red margin rule */
+.cc-fb-backdrop::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 72px;
+  width: 1px;
+  background: rgba(196, 69, 58, 0.18);
   pointer-events: none;
 }
 
@@ -81,9 +98,12 @@
   display: flex;
   flex-direction: column;
   border: 1px solid var(--cc-shell-border);
+  border-left: 3px solid rgba(196, 69, 58, 0.3);
   border-radius: var(--cc-radius);
   background: var(--cc-shell-bg);
-  box-shadow: var(--cc-shadow);
+  box-shadow:
+    3px 3px 0 rgba(42, 31, 21, 0.04),
+    6px 6px 0 rgba(42, 31, 21, 0.02);
   color: var(--cc-text);
   font-family: var(--cc-font-body);
   font-size: 14px;
@@ -92,16 +112,22 @@
   animation: cc-fb-slidein 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Horizontal ruled lines on shell surface */
 .cc-fb::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(rgba(145, 195, 240, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(145, 195, 240, 0.06) 1px, transparent 1px);
-  background-size: 20px 20px;
   pointer-events: none;
   z-index: 0;
+  border-radius: inherit;
+  background-image:
+    linear-gradient(
+      transparent 23px,
+      rgba(42, 31, 21, 0.035) 23px,
+      rgba(42, 31, 21, 0.035) 24px,
+      transparent 24px
+    );
+  background-size: 100% 24px;
 }
 
 
@@ -120,11 +146,11 @@
 
 .cc-fb-title {
   margin: 0;
-  font-family: var(--cc-font-mono);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--cc-font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-style: italic;
   color: var(--cc-text);
 }
 
@@ -135,8 +161,8 @@
   width: 32px;
   height: 32px;
   border-radius: var(--cc-radius-sm);
-  border: 1px solid var(--cc-border);
-  background: var(--cc-surface-alt);
+  border: none;
+  background: transparent;
   color: var(--cc-text-secondary);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -147,8 +173,7 @@
 
 .cc-fb-close:hover {
   color: var(--cc-text);
-  background: var(--cc-surface);
-  border-color: var(--cc-text-secondary);
+  background: rgba(42, 31, 21, 0.06);
 }
 
 .cc-fb-close:active {
@@ -157,33 +182,33 @@
 
 
 /* ----------------------------------------------------------------
-   5. INTENT TOGGLE
+   5. INTENT TOGGLE — flat tab bar with underline
    ---------------------------------------------------------------- */
 
 .cc-fb-intent {
   display: flex;
-  gap: 4px;
+  gap: 0;
   margin: 16px 20px 0;
-  padding: 4px;
-  background: var(--cc-intent-bg);
-  border-radius: var(--cc-radius-sm);
-  border: 1px solid var(--cc-border-subtle);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgba(42, 31, 21, 0.08);
   position: relative;
   z-index: 1;
 }
 
 .cc-fb-intent-btn {
   flex: 1;
-  padding: 8px 12px;
+  padding: 10px 16px;
   border: none;
   border-radius: 0;
   background: transparent;
   color: var(--cc-text-secondary);
-  font-family: var(--cc-font-mono);
-  font-size: 11px;
+  font-family: var(--cc-font-body);
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -193,9 +218,11 @@
 }
 
 .cc-fb-intent-btn[data-active="true"] {
-  background: var(--cc-intent-active-bg);
+  background: transparent;
   color: var(--cc-intent-active-text);
   font-weight: 600;
+  border-bottom: 2px solid var(--cc-accent);
+  margin-bottom: -1px;
 }
 
 
@@ -254,10 +281,11 @@
   color: var(--cc-recording);
 }
 
+/* Ink blot recording dot */
 .cc-fb-rec-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 40% 60% 55% 45%;
   background: currentColor;
   flex-shrink: 0;
 }
@@ -344,11 +372,10 @@
   border: 1px solid var(--cc-border-subtle);
   background: transparent;
   color: var(--cc-text-secondary);
-  font-family: var(--cc-font-mono);
-  font-size: 11px;
+  font-family: var(--cc-font-body);
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
@@ -399,15 +426,17 @@
   gap: 6px;
 }
 
+/* Serif italic caption label */
 .cc-fb-label {
-  font-family: var(--cc-font-mono);
+  font-family: var(--cc-font-body);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 500;
+  font-style: italic;
   color: var(--cc-text-secondary);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
+/* Textarea with lined paper effect */
 .cc-fb-textarea {
   width: 100%;
   min-height: 88px;
@@ -415,11 +444,20 @@
   padding: 12px;
   border-radius: var(--cc-radius-sm);
   border: 1px solid var(--cc-input-border);
-  background: var(--cc-input-bg);
+  background-color: var(--cc-input-bg);
+  background-image:
+    linear-gradient(
+      transparent 23px,
+      rgba(42, 31, 21, 0.04) 23px,
+      rgba(42, 31, 21, 0.04) 24px,
+      transparent 24px
+    );
+  background-size: 100% 24px;
+  background-position: 0 -1px;
   color: var(--cc-text);
   font-family: var(--cc-font-body);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 24px;
   transition: border-color 0.2s;
   outline: none;
 }
@@ -580,11 +618,10 @@
   border-radius: var(--cc-radius-sm);
   background: var(--cc-accent);
   color: var(--cc-accent-text);
-  font-family: var(--cc-font-mono);
-  font-size: 11px;
+  font-family: var(--cc-font-body);
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0;
   cursor: pointer;
   margin-left: auto;
   transition: background 0.15s ease, transform 0.1s ease;
@@ -625,14 +662,16 @@
   font-weight: 500;
 }
 
+/* Editorial footnote style */
 .cc-fb-info {
-  padding: 10px 14px;
+  padding: 12px 0 0;
   border-radius: 0;
-  background: var(--cc-surface-alt);
-  border: 1px solid var(--cc-border-subtle);
-  border-left: 2px solid var(--cc-accent);
-  font-family: var(--cc-font-mono);
-  font-size: 11px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid rgba(42, 31, 21, 0.08);
+  font-family: var(--cc-font-display);
+  font-style: italic;
+  font-size: 12px;
   color: var(--cc-text-secondary);
   line-height: 1.5;
 }
@@ -649,7 +688,7 @@
 
 
 /* ----------------------------------------------------------------
-   11. FOOTER & SUBMIT
+   11. FOOTER & SUBMIT — ink-colored stamp
    ---------------------------------------------------------------- */
 
 .cc-fb-footer {
@@ -665,13 +704,13 @@
   border-radius: var(--cc-radius-sm);
   background: var(--cc-accent);
   color: var(--cc-accent-text);
-  font-family: var(--cc-font-mono);
-  font-size: 12px;
+  font-family: var(--cc-font-body);
+  font-size: 14px;
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 1px 1px 0 rgba(42, 31, 21, 0.1);
 }
 
 .cc-fb-submit:hover:not(:disabled) {
@@ -726,11 +765,11 @@
 
 .cc-fb-success-label {
   margin: 0;
-  font-family: var(--cc-font-mono);
-  font-size: 14px;
+  font-family: var(--cc-font-display);
+  font-size: 16px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.01em;
   color: var(--cc-text);
   opacity: 0;
   animation: cc-fb-fadein 0.4s ease 0.6s forwards;
@@ -738,6 +777,7 @@
 
 .cc-fb-success-sub {
   margin: 0;
+  font-family: var(--cc-font-body);
   font-size: 13px;
   color: var(--cc-text-secondary);
   opacity: 0;
@@ -752,14 +792,20 @@
   border-radius: var(--cc-radius);
 }
 
+/* Organic ink-splash confetti shapes */
 .cc-fb-confetti-dot {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  border-radius: 40% 60% 55% 45%;
   opacity: 0;
   animation: cc-fb-confetti-pop 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.cc-fb-confetti-c0 { background: #4a7c59; }
+.cc-fb-confetti-c1 { background: #c4453a; }
+.cc-fb-confetti-c2 { background: #2a6090; }
+.cc-fb-confetti-c3 { background: #8a6840; }
+.cc-fb-confetti-c4 { background: #6a5a90; }
+.cc-fb-confetti-c5 { background: #2a7070; }
 
 
 /* ----------------------------------------------------------------
@@ -768,7 +814,7 @@
 
 .cc-fb-divider {
   height: 1px;
-  background: var(--cc-border-subtle);
+  background: rgba(42, 31, 21, 0.08);
   border: none;
   margin: 0;
 }
@@ -833,7 +879,7 @@
   .cc-fb-success,
   .cc-fb-success-label,
   .cc-fb-success-sub {
-    animation-duration: 0.01ms;
+    animation-duration: 0.01ms !important;
   }
 
   .cc-fb-success-circle,

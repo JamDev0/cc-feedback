@@ -87,7 +87,7 @@ export function FeedbackOverlay({
   };
 
   return (
-    <div data-cc-theme="blueprint" data-cc-feedback-overlay="true">
+    <div data-cc-theme="manuscript" data-cc-feedback-overlay="true">
       <FreezeBackdrop />
       <section
         aria-label="Feedback"
