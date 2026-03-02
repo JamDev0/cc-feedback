@@ -442,6 +442,44 @@
   border: 1px solid var(--cc-border);
 }
 
+.cc-fb-canvas-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: var(--cc-surface-alt);
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.cc-fb-undo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border: 1px solid var(--cc-border);
+  border-radius: var(--cc-radius-sm);
+  background: transparent;
+  color: var(--cc-text);
+  font-family: var(--cc-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.cc-fb-undo-btn:hover:not(:disabled) {
+  border-color: var(--cc-text-secondary);
+}
+
+.cc-fb-undo-btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.cc-fb-undo-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .cc-fb-canvas-wrap canvas {
   display: block;
   width: 100%;

@@ -7,7 +7,9 @@ interface ScreenshotAnnotatorProps {
 
 export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnotatorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const historyRef = useRef<ImageData[]>([]);
   const [drawing, setDrawing] = useState(false);
+  const [undoCount, setUndoCount] = useState(0);
 
   useEffect(() => {
     const url = URL.createObjectURL(screenshot);
@@ -55,6 +57,12 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
     if (!canvas || !context) return;
+
+    historyRef.current.push(
+      context.getImageData(0, 0, canvas.width, canvas.height)
+    );
+    setUndoCount(historyRef.current.length);
+
     canvas.setPointerCapture(event.pointerId);
     const { x, y } = withPosition(event);
     context.beginPath();
@@ -76,8 +84,46 @@ export function ScreenshotAnnotator({ screenshot, onAnnotated }: ScreenshotAnnot
     if (blob) onAnnotated(blob);
   };
 
+  const undo = async () => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+    const previous = historyRef.current.pop();
+    if (!previous) return;
+    context.putImageData(previous, 0, 0);
+    setUndoCount(historyRef.current.length);
+    const blob = await new Promise<Blob | null>((resolve) =>
+      canvas.toBlob(resolve, "image/png")
+    );
+    if (blob) onAnnotated(blob);
+  };
+
   return (
     <div className="cc-fb-canvas-wrap">
+      <div className="cc-fb-canvas-toolbar">
+        <button
+          type="button"
+          className="cc-fb-undo-btn"
+          onClick={undo}
+          disabled={undoCount === 0}
+          aria-label="Undo last stroke"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 5.5h5.5a3 3 0 1 1 0 6H7" />
+            <path d="M5.5 3L3 5.5 5.5 8" />
+          </svg>
+          Undo
+        </button>
+      </div>
       <canvas
         ref={canvasRef}
         onPointerDown={start}
